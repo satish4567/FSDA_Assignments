@@ -1,0 +1,50 @@
+/* Question  1
+ Evaluate the median severity value of accidents caused by various Motorcycles*/
+ 
+ 
+select a.Accident_Severity,vt.vehicle_type, 
+row_number() over(order by Accident_Severity ) as 'row2',
+row_number() over(order by Accident_Severity desc) as 'row1'
+from accidents a 
+left outer join vehicles v on a.Accident_Index=v.Accident_Index
+left outer join vehicle_types vt on v.vehicle_code=vt.vehicle_code
+where vehicle_type like "%motorcycle%"
+order by a.Accident_Severity
+;
+
+/*      2. Question-
+ Evaluate Accident Severity and Total Accidents per Vehicle Type  */
+
+
+select vt.vehicle_type,a.Accident_Severity as Severity,count(vt.vehicle_type) as Total_Accident 
+from accidents a 
+join vehicles v on a.Accident_Index=v.Accident_Index 
+join vehicle_types vt on v.vehicle_code=vt.vehicle_code
+group by 1
+order by 2,3
+;
+
+
+
+/*    3.Question-
+ Calculate the Average Severity by vehicle type. */
+
+
+ select vt.vehicle_type,avg(a.Accident_Severity) as Average_Accident_Severity
+from accidents a 
+left outer join vehicles v on a.Accident_Index=v.Accident_Index
+left outer join vehicle_types vt on v.vehicle_code=vt.vehicle_code
+group by vehicle_type order by Average_Accident_Severity;
+
+
+
+/*           4.Question-
+     Calculate the Average Severity and Total Accidents by Motorcycle*/
+
+
+ select vt.vehicle_type,avg(a.Accident_Severity) as Average_Accident_Severity ,count(vt.vehicle_type) as total_Accident
+from accidents a 
+left outer join vehicles v on a.Accident_Index=v.Accident_Index
+left outer join vehicle_types vt on v.vehicle_code=vt.vehicle_code
+where vt.vehicle_type like "%Motorcycle%"
+group by vehicle_type order by Average_Accident_Severity;
